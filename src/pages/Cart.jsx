@@ -17,7 +17,7 @@ const Cart = ({ cart, setCart }) => {
         {cart.length === 0 ? (
           <p className="text-center text-lg">Your cart is empty.</p>
         ) : (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {cart.map((item, index) => (
               <div
                 key={index}
