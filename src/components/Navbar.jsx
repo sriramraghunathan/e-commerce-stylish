@@ -8,7 +8,7 @@ const Navbar = ({ cartCount }) => {
     <>
       <nav className="bg-gray-400 text-white p-4 flex items-center justify-between">
         {/* Logo */}
-        <div className="w-14 flex-shrink-0">
+        <div className="w-20 flex-shrink-0">
           <img
             src="https://png.pngtree.com/template/20200623/ourmid/pngtree-f-logo-vector-geometric-stylish-simple-designs-black-color-white-background-image_385210.jpg"
             alt="Logo"
@@ -18,15 +18,11 @@ const Navbar = ({ cartCount }) => {
 
         {/* Search bar - hidden on small screens */}
         <div className="hidden md:flex flex-1 mx-10">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full px-4 py-2 border text-black border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          
         </div>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex gap-8 items-center">
+        <div className="hidden md:flex gap-10 font-bold text-black text-xl items-center">
           <Link to="/" className="hover:underline">
             Home
           </Link>
@@ -56,11 +52,7 @@ const Navbar = ({ cartCount }) => {
       {/* Mobile Dropdown Menu */}
       {menuOpen && (
         <div className="md:hidden bg-gray-100 text-black p-4 space-y-3">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full px-4 py-2 border text-black border-gray-300 rounded-full"
-          />
+          
           <Link to="/" className="block hover:underline">
             Home
           </Link>
@@ -77,7 +69,7 @@ const Navbar = ({ cartCount }) => {
       )}
 
       {/* Category Navigation */}
-      <nav className="bg-gray-200 text-gray-800 p-2 md:p-4 flex flex-wrap justify-around text-sm md:text-lg font-medium">
+      <nav className="bg-gray-100 text-black p-2 md:p-4 flex flex-wrap justify-around text-sm md:text-lg font-medium">
         {["men", "women", "kids", "accessories", "shoes"].map((cat) => (
           <Link
             key={cat}

@@ -14,7 +14,7 @@ const Cart = ({ cart, setCart }) => {
         {cart.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
-          <div className="grid grid-cols-3 p-4 gap-4">
+          <div className="grid grid-cols-2 p-4 gap-20">
             {cart.map((item, index) => (
               <div
                 key={index}
@@ -32,7 +32,7 @@ const Cart = ({ cart, setCart }) => {
                 </div>
                 <button
                   onClick={() => removeFromCart(index)}
-                  className="text-white bg-red-400 text-3xl hover:bg-red-600  w-12 h-12 text-center rounded-full"
+                  className="text-white bg-red-600 text-3xl hover:bg-red-400 p-3 text-center rounded-full"
                 >
                   x
                 </button>
@@ -41,8 +41,9 @@ const Cart = ({ cart, setCart }) => {
           </div>
         )}
       </div>
-      <div>
+      <div className="flex mb-10">
         <p className="mt-4 p-5 text-4xl font-bold">Total: ₹{total}</p>
+        <button className="mt-4 ml-20 border-black rounded-lg text-center bg-green-300 p-5 text-4xl font-bold">Pay Now</button>
       </div>
     </>
   );
