@@ -8,7 +8,7 @@ const Navbar = ({ cartCount }) => {
     <>
       <nav className="bg-gray-400 text-white p-4 flex items-center justify-between">
         {/* Logo */}
-        <div className="w-20 flex-shrink-0">
+        <div className="w-10 sm:w-20 flex-shrink-0">
           <img
             src="https://png.pngtree.com/template/20200623/ourmid/pngtree-f-logo-vector-geometric-stylish-simple-designs-black-color-white-background-image_385210.jpg"
             alt="Logo"
