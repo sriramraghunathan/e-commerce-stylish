@@ -81,10 +81,6 @@ const NewArrivals = () => {
               src={product.image}
               alt={product.name}
               className="w-full h-48 object-cover mb-3 rounded"
-              onClick={() => {
-                window.scrollTo({ top: -1, behavior: "smooth" });
-                navigate(`/products/men/${product.id}`, { state: product });
-              }}
             />
             <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mb-2">
               New
