@@ -72,6 +72,10 @@ const NewArrivals = () => {
           <div
             key={product.id}
             className="border rounded-lg shadow p-4 bg-white"
+            onClick={() => {
+                window.scrollTo({ top: -1, behavior: "smooth" });
+                navigate(`/products/men/${product.id}`, { state: product });
+              }}
           >
             <img
               src={product.image}
