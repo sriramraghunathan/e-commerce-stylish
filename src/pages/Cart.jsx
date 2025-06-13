@@ -9,7 +9,7 @@ const Cart = ({ cart, setCart }) => {
 
   return (
     <>
-      <div className="p-4 sm:p-6">
+      <div className="p-4  sm:p-6">
         <h2 className="text-2xl sm:text-3xl font-semibold mb-4 text-center">
           Your Cart
         </h2>
@@ -23,7 +23,7 @@ const Cart = ({ cart, setCart }) => {
                 key={index}
                 className="flex justify-between items-center p-3 border rounded-lg shadow-sm"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 ">
                   <img
                     src={item.image}
                     alt={item.name}
@@ -46,7 +46,7 @@ const Cart = ({ cart, setCart }) => {
       </div>
 
       {cart.length > 0 && (
-        <div className="flex flex-col mb-10 sm:flex-row items-center justify-between px-4 sm:px-6 mt-6 gap-4">
+        <div className=" flex flex-col mb-10 sm:flex-row items-center justify-between px-4 sm:px-6 mt-6 gap-4">
           <p className="text-3xl sm:text-4xl font-bold">Total: ₹{total}</p>
           <button className="bg-green-500 hover:bg-green-600 text-white text-xl sm:text-2xl font-bold px-6 py-3 rounded-lg transition-all duration-200">
             Pay Now

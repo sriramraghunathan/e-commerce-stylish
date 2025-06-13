@@ -6,8 +6,7 @@ const Navbar = ({ cartCount }) => {
 
   return (
     <>
-      <nav className="bg-gray-400 text-white p-4 flex items-center justify-between">
-        {/* Logo */}
+      <nav className="bg-yellow-100 text-white p-4 flex items-center justify-between">
         <div className="w-10 sm:w-20 flex-shrink-0">
           <img
             src="https://png.pngtree.com/template/20200623/ourmid/pngtree-f-logo-vector-geometric-stylish-simple-designs-black-color-white-background-image_385210.jpg"
@@ -69,7 +68,7 @@ const Navbar = ({ cartCount }) => {
       )}
 
       {/* Category Navigation */}
-      <nav className="bg-gray-100 text-black p-2 md:p-4 flex flex-wrap justify-around text-sm md:text-lg font-medium">
+      <nav className="bg-yellow-50 text-black p-2 md:p-4 flex flex-wrap justify-around text-sm md:text-lg font-medium">
         {["men", "women", "kids", "accessories", "shoes"].map((cat) => (
           <Link
             key={cat}

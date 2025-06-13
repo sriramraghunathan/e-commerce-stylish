@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const sampleProducts = [
   {
@@ -118,18 +119,23 @@ const sampleProducts = [
 ];
 
 const Products = ({ cart, setCart }) => {
+    const navigate = useNavigate();
   const addToCart = (product) => {
     setCart([...cart, product]);
   };
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="p-4 bg-yellow-100 sm:p-6">
       <h2 className="text-2xl font-semibold mb-6 text-center">Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center">
+      <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center">
         {sampleProducts.map((product, idx) => (
           <div
             key={`${product.id}-${idx}`}
-            className="border shadow-sm p-4 rounded-lg flex flex-col items-center"
+            className="border bg-white shadow-sm p-4 rounded-lg flex flex-col items-center"
+            onClick={() => {
+              window.scrollTo({ top: -1, behavior: "smooth" });
+              navigate(`/products/men/${product.id}`, { state: product });
+            }}
           >
             <img
               src={product.image}

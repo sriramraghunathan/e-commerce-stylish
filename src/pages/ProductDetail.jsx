@@ -18,13 +18,13 @@ const ProductDetail = ({ cart, setCart }) => {
 
   return (
     <>
-      <div className="p-6">
+      <div className="p-6 bg-yellow-100">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col md:flex-row items-center md:items-start">
             <img
               src={product.image}
               alt={product.name}
-              className="w-full md:w-96 h-auto object-cover mb-4 md:mb-0 rounded"
+              className="w-auto md:w-80 h-auto object-cover mb-4 md:mb-0 rounded"
             />
             <div className="ml-0 md:ml-8">
               <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
@@ -51,8 +51,8 @@ const ProductDetail = ({ cart, setCart }) => {
           </div>
         </div>
       </div>
-      <NewArrivals/>
-  </>
+      <NewArrivals />
+    </>
   );
 };
 

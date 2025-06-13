@@ -18,8 +18,7 @@ const CategoryPage = ({ category, products }) => {
                 alt={item.name}
                 className="w-full h-48 object-cover mb-3 rounded cursor-pointer"
                 onClick={() =>
-                  navigate(`/products/${category.toLowerCase()}/${item.id}`, {
-                    state: item,})
+                  navigate(`/products/${category.toLowerCase()}/${item.id}`, {state: item,})
                 }
               />
               <h3 className="text-lg font-semibold">{item.name}</h3>

@@ -88,15 +88,13 @@ export default function Login() {
           {isSignup ? "Sign Up" : "Login"}
         </button>
       </form>
-
       <div className="mt-4 text-center">
         <p className="text-sm">
           {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
           <button
             type="button"
             onClick={toggleMode}
-            className="text-blue-600 hover:underline font-medium"
-          >
+            className="text-blue-600 hover:underline font-medium">
             {isSignup ? "Login" : "Sign Up"}
           </button>
         </p>

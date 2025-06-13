@@ -45,7 +45,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="p-2 bg-orange-100 ">
+      <div className="p-2 bg-yellow-100 ">
         <div className="text-center mt-8">
           <h1 className="text-3xl font-bold mb-4">Welcome to Stylish</h1>
           <p className="text-lg mb-4">great deals!</p>
@@ -56,7 +56,7 @@ const Home = () => {
           showThumbs={false}
           showStatus={false}
           interval={2000}
-        >
+          >
           {slides.map((slide) => (
             <div key={slide.id}>
               <img src={slide.image} alt={slide.caption} />
