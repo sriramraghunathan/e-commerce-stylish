@@ -1,12 +1,53 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ cartCount }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showBanner, setShowBanner] = useState(true); // <-- for closing the banner
+  const navigate = useNavigate();
+  const [log, setLog] = useState(false);
+
+  useEffect(() => {
+    auth.onAuthStateChanged(function (user) {
+      if (user) {
+        console.log("User logged In");
+        setLog(true);
+      } else {
+        console.log("User Logged Out");
+        setLog(false);
+      }
+    });
+  }, []);
+
+  function logout() {
+    signOut(auth)
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.error("Logout failed:", error);
+      });
+  }
 
   return (
     <>
-      <nav className="bg-yellow-100 text-white p-4 flex items-center justify-between">
+      {showBanner && (
+        <div className="flex gap-10 justify-center items-center bg-black text-red-600 p-1">
+          <h1 className="text-sm md:text-lg ml-4">
+            New offers arriving soon!!!
+          </h1>
+          <button
+            onClick={() => setShowBanner(false)}
+            className="text-white mr-4 text-2xl"
+          >
+            ×
+          </button>
+        </div>
+      )}
+      <nav className="bg-white p-4 flex items-center justify-between">
         <div className="w-10 sm:w-20 flex-shrink-0">
           <img
             src="https://png.pngtree.com/template/20200623/ourmid/pngtree-f-logo-vector-geometric-stylish-simple-designs-black-color-white-background-image_385210.jpg"
@@ -15,10 +56,7 @@ const Navbar = ({ cartCount }) => {
           />
         </div>
 
-        {/* Search bar - hidden on small screens */}
-        <div className="hidden md:flex flex-1 mx-10">
-          
-        </div>
+        <div className="hidden md:flex flex-1 mx-10"></div>
 
         {/* Desktop Nav Links */}
         <div className="hidden md:flex gap-10 font-bold text-black text-xl items-center">
@@ -31,27 +69,35 @@ const Navbar = ({ cartCount }) => {
           <Link to="/cart" className="hover:underline">
             Cart({cartCount})
           </Link>
-          <Link
-            to="/login"
-            className="hover:underline border-white text-black bg-white p-1 w-8 rounded-full"
-          >
-            <span className="material-icons">person</span>
-          </Link>
+          {log ? (
+            <button
+              onClick={logout}
+              className="hover:underline rounded-full bg-red-600 p-2 text-white"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="hover:underline border-black text-white bg-black p-1 rounded-full"
+            >
+              <span className="material-icons">person</span>
+            </Link>
+          )}
         </div>
 
-        {/* Hamburger for mobile */}
+        {/* Hamburger Menu (Mobile) */}
         <button
-          className="md:hidden text-white text-3xl"
+          className="md:hidden text-black text-3xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           ☰
         </button>
       </nav>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-gray-100 text-black p-4 space-y-3">
-          
+        <div className="md:hidden bg-white text-black p-4 space-y-3">
           <Link to="/" className="block hover:underline">
             Home
           </Link>
@@ -64,16 +110,22 @@ const Navbar = ({ cartCount }) => {
           <Link to="/login" className="block hover:underline">
             Login
           </Link>
+          <button
+            onClick={logout}
+            className="hover:underline rounded-full bg-red-600 p-2 text-white"
+          >
+            Logout
+          </button>
         </div>
       )}
 
-      {/* Category Navigation */}
-      <nav className="bg-yellow-50 text-black p-2 md:p-4 flex flex-wrap justify-around text-sm md:text-lg font-medium">
+      {/* Categories */}
+      <nav className="bg-gray-800 text-white p-2 md:p-4 flex flex-wrap justify-around text-sm md:text-lg font-medium">
         {["men", "women", "kids", "accessories", "shoes"].map((cat) => (
           <Link
             key={cat}
             to={`/${cat}`}
-            className="text-black px-3 py-2 hover:bg-black hover:text-white hover:rounded-full hover:underline"
+            className="text-white px-3 py-2 hover:bg-green-300 hover:text-black  hover:rounded-full hover:underline"
           >
             {cat.charAt(0).toUpperCase() + cat.slice(1)}
           </Link>

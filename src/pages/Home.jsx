@@ -45,7 +45,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="p-2 bg-yellow-100 ">
+      <div className="p-2  ">
         <div className="text-center mt-8">
           <h1 className="text-3xl font-bold mb-4">Welcome to Stylish</h1>
           <p className="text-lg mb-4">great deals!</p>

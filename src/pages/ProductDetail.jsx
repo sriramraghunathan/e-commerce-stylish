@@ -18,7 +18,7 @@ const ProductDetail = ({ cart, setCart }) => {
 
   return (
     <>
-      <div className="p-6 bg-yellow-100">
+      <div className="p-6 ">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col md:flex-row items-center md:items-start">
             <img

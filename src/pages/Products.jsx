@@ -125,7 +125,7 @@ const Products = ({ cart, setCart }) => {
   };
 
   return (
-    <div className="p-4 bg-yellow-100 sm:p-6">
+    <div className="p-4 sm:p-6">
       <h2 className="text-2xl font-semibold mb-6 text-center">Products</h2>
       <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center">
         {sampleProducts.map((product, idx) => (

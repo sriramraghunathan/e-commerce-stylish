@@ -1,17 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { auth } from "../firebase"; // adjust the path as needed
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Login() {
+  const navigate = useNavigate();
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
+
+  useEffect(()=>{
+    auth.onAuthStateChanged(function(user){
+      if(user){
+        console.log("Logged In")
+        navigate("/")
+      }
+      else{
+        console.log("Logged Out")
+      }
+    })
+  },[navigate])
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,6 +36,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
+    
 
     try {
       if (isSignup) {
@@ -27,10 +44,11 @@ export default function Login() {
         alert("Signup successful!");
       } else {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("Login successful!");
+        console.log("Login successful!");
+        navigate("/")
       }
     } catch (error) {
-      console.error("Firebase Auth Error:", error.message);
+      console.error("login failed", error.message);
       alert(error.message);
     }
   };
