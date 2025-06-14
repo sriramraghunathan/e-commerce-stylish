@@ -97,7 +97,7 @@ const Navbar = ({ cartCount }) => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white text-black p-4 space-y-3">
+        <div   className="md:hidden text-center  bg-white text-black p-4 space-y-6">
           <Link to="/" className="block hover:underline">
             Home
           </Link>
@@ -107,15 +107,20 @@ const Navbar = ({ cartCount }) => {
           <Link to="/cart" className="block hover:underline">
             Cart({cartCount})
           </Link>
-          <Link to="/login" className="block hover:underline">
-            Login
-          </Link>
-          <button
-            onClick={logout}
-            className="hover:underline rounded-full bg-red-600 p-2 text-white"
-          >
-            Logout
-          </button>
+          {log ? (
+            <button
+              onClick={logout}
+              className="hover:underline rounded-full bg-red-600 p-2 text-white"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="hover:underline border-black text-white bg-black p-1 rounded-full"
+            >
+              <span className="material-icons">person</span>
+            </Link>)}
         </div>
       )}
 
