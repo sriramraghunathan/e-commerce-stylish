@@ -3,6 +3,8 @@ import axios from "axios";
 
 const Cart = ({ cart, setCart }) => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState({});
+  const [purchasedItems, setPurchasedItems] = useState([]);
 
   const removeFromCart = (index) => {
     const newCart = [...cart];
@@ -42,6 +44,15 @@ const Cart = ({ cart, setCart }) => {
           );
           if (verifyRes.status === 200) {
             setPaymentSuccess(true);
+            setPaymentDetails({
+              orderId: orderData.data.id,
+              paymentId: res.razorpay_payment_id,
+              deliveryAddress: "123, Stylish Street, Fashion City, India",
+              estimatedDelivery: new Date(
+                Date.now() + 5 * 24 * 60 * 60 * 1000
+              ).toDateString(),
+            });
+            setPurchasedItems(cart); // Save purchased items
             setCart([]); // Clear cart after payment
           } else {
             alert("Payment verification failed.");
@@ -69,13 +80,54 @@ const Cart = ({ cart, setCart }) => {
         </h2>
 
         {paymentSuccess ? (
-          <div className="text-center mt-10">
-            <h3 className="text-2xl font-semibold text-green-600 mb-4">
+          <div className="text-center mt-10 bg-green-50 border border-green-200 rounded-lg p-6 shadow-md max-w-2xl mx-auto">
+            <h3 className="text-2xl font-semibold text-green-700 mb-4">
               🎉 Payment Successful!
             </h3>
-            <p className="text-lg">
-              Thank you for your purchase. Your order will be delivered soon. 🚚
+            <p className="text-lg mb-2">
+              Thank you for your purchase. Your order has been confirmed.
             </p>
+            <div className="mt-4 text-left text-gray-800">
+              <p>
+                <strong>📦 Order ID:</strong> {paymentDetails.orderId}
+              </p>
+              <p>
+                <strong>💳 Payment ID:</strong> {paymentDetails.paymentId}
+              </p>
+              <p>
+                <strong>🏠 Delivery Address:</strong>{" "}
+                {paymentDetails.deliveryAddress}
+              </p>
+              <p>
+                <strong>🚚 Estimated Delivery:</strong>{" "}
+                {paymentDetails.estimatedDelivery}
+              </p>
+            </div>
+
+            {/* Purchased Items */}
+            <div className="mt-6 text-left">
+              <h4 className="text-xl font-bold text-gray-700 mb-3">
+                🛍️ Purchased Items
+              </h4>
+              {purchasedItems.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex justify-between items-center p-3 border rounded-lg shadow-sm mb-2"
+                >
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                    <div>
+                      <p className="text-lg font-semibold">{item.name}</p>
+                      <p className="text-sm text-gray-600">₹{item.price}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : cart.length === 0 ? (
           <p className="text-center text-lg">Your cart is empty.</p>
