@@ -1,0 +1,73 @@
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
+import NewArrivals from "./NewArrivals";
+
+const Home = () => {
+  const [setNewArrivals] = useState([]); // for new products
+
+  const slides = [
+    {
+      id: 1,
+      image:
+        "https://img.freepik.com/free-vector/flat-twitch-banner-template-fashion-flowers_23-2150407674.jpg?semt=ais_hybrid&w=740",
+      caption: "Big Sale Today!",
+    },
+    {
+      id: 2,
+      image:
+        "https://d3jmn01ri1fzgl.cloudfront.net/photoadking/webp_thumbnail/shark-new-collection-sale-clothing-banner-template-p3ztild89dffd0.webp",
+      caption: "Check Out Our New Arrivals",
+    },
+    {
+      id: 3,
+      image:
+        "https://img.freepik.com/free-vector/gradient-boutique-twitch-banner_23-2149334951.jpg",
+      caption: "Free Shipping on Orders Over $50",
+    },
+  ];
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/products/new-arrivals"
+        );
+        setNewArrivals(response.data);
+      } catch (error) {
+        console.error("Error fetching new arrivals:", error);
+      }
+    };
+
+    fetchNewArrivals();
+  });
+
+  return (
+    <>
+      <div className="p-2  ">
+        <div className="text-center mt-8">
+          <h1 className="text-3xl font-bold mb-4">Welcome to Stylish</h1>
+          <p className="text-lg mb-4">great deals!</p>
+        </div>
+        <Carousel
+          autoPlay
+          infiniteLoop
+          showThumbs={false}
+          showStatus={false}
+          interval={2000}
+          >
+          {slides.map((slide) => (
+            <div key={slide.id}>
+              <img src={slide.image} alt={slide.caption} />
+              <p className="legend">{slide.caption}</p>
+            </div>
+          ))}
+        </Carousel>
+      </div>
+      <NewArrivals />
+    </>
+  );
+};
+
+export default Home;
