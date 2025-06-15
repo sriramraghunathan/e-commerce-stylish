@@ -132,15 +132,15 @@ const Products = ({ cart, setCart }) => {
           <div
             key={`${product.id}-${idx}`}
             className="border bg-white shadow-sm p-4 rounded-lg flex flex-col items-center"
-            onClick={() => {
-              window.scrollTo({ top: -1, behavior: "smooth" });
-              navigate(`/products/men/${product.id}`, { state: product });
-            }}
           >
             <img
               src={product.image}
               alt={product.name}
               className="w-full h-48 object-cover mb-4 rounded"
+              onClick={() => {
+                window.scrollTo({ top: -1, behavior: "smooth" });
+                navigate(`/products/men/${product.id}`, { state: product });
+              }}
             />
 
             <Link to={`/products/${product.id}`}>

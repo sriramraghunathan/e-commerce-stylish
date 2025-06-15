@@ -1,54 +1,83 @@
-import axios from 'axios'
+import { useState } from "react";
+import axios from "axios";
 
 const Cart = ({ cart, setCart }) => {
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+
   const removeFromCart = (index) => {
     const newCart = [...cart];
     newCart.splice(index, 1);
     setCart(newCart);
   };
 
-  const localBackendUrl = "http://localhost:5000/api/payment"; 
+  const localBackendUrl = "https://e-commerce-stylish.onrender.com";
 
-  const handleBuyNow= async()=>{
-    const {data}= await axios.post(`${localBackendUrl}/orders`,{amount: total});
-    initPayment(data);
+  const handleBuyNow = async () => {
+    try {
+      const { data } = await axios.post(
+        `${localBackendUrl}/api/payment/orders`,
+        {
+          amount: total,
+        }
+      );
+      initPayment(data);
+    } catch (error) {
+      console.error("Error initiating payment:", error);
+      alert("Payment initiation failed.");
+    }
   };
 
-  const initPayment=(orderData)=>{
+  const initPayment = (orderData) => {
     const options = {
       key: "rzp_test_mXPERjodj0tlJu",
       amount: orderData.data.amount,
       currency: orderData.data.currency,
       description: "Test Payment method",
-      order_id:orderData.data.id,
-      handler:async (res)=>{
-        await axios.post(`${localBackendUrl}/verify`,res).then((res)=>{
-          if(res.status === 200){
-            alert('Payment Verified...')
-          }else{
-            alert('Payment Failed..')
+      order_id: orderData.data.id,
+      handler: async (res) => {
+        try {
+          const verifyRes = await axios.post(
+            `${localBackendUrl}/api/payment/verify`,
+            res
+          );
+          if (verifyRes.status === 200) {
+            setPaymentSuccess(true);
+            setCart([]); // Clear cart after payment
+          } else {
+            alert("Payment verification failed.");
           }
-        })
-
+        } catch (err) {
+          console.error(err);
+          alert("Error verifying payment.");
+        }
       },
-      theme:{
-        color:'#3399cc'
-      }
+      theme: {
+        color: "#3399cc",
+      },
     };
-    const razorpay_popup =new window.Razorpay(options);
+    const razorpay_popup = new window.Razorpay(options);
     razorpay_popup.open();
-  }
+  };
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <>
-      <div className="p-4  sm:p-6">
+      <div className="p-4 sm:p-6">
         <h2 className="text-2xl sm:text-3xl font-semibold mb-4 text-center">
           Your Cart
         </h2>
 
-        {cart.length === 0 ? (
+        {paymentSuccess ? (
+          <div className="text-center mt-10">
+            <h3 className="text-2xl font-semibold text-green-600 mb-4">
+              🎉 Payment Successful!
+            </h3>
+            <p className="text-lg">
+              Thank you for your purchase. Your order will be delivered soon. 🚚
+            </p>
+          </div>
+        ) : cart.length === 0 ? (
           <p className="text-center text-lg">Your cart is empty.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -57,7 +86,7 @@ const Cart = ({ cart, setCart }) => {
                 key={index}
                 className="flex justify-between items-center p-3 border rounded-lg shadow-sm"
               >
-                <div className="flex items-center gap-4 ">
+                <div className="flex items-center gap-4">
                   <img
                     src={item.image}
                     alt={item.name}
@@ -79,10 +108,13 @@ const Cart = ({ cart, setCart }) => {
         )}
       </div>
 
-      {cart.length > 0 && (
-        <div className=" flex flex-col mb-10 sm:flex-row items-center justify-between px-4 sm:px-6 mt-6 gap-4">
+      {cart.length > 0 && !paymentSuccess && (
+        <div className="flex flex-col mb-10 sm:flex-row items-center justify-between px-4 sm:px-6 mt-6 gap-4">
           <p className="text-3xl sm:text-4xl font-bold">Total: ₹{total}</p>
-          <button onClick={handleBuyNow} className="bg-green-500 hover:bg-green-600 text-white text-xl sm:text-2xl font-bold px-6 py-3 rounded-lg transition-all duration-200">
+          <button
+            onClick={handleBuyNow}
+            className="bg-green-500 hover:bg-green-600 text-white text-xl sm:text-2xl font-bold px-6 py-3 rounded-lg transition-all duration-200"
+          >
             Pay Now
           </button>
         </div>

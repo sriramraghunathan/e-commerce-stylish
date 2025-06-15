@@ -1,12 +1,7 @@
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
 import NewArrivals from "./NewArrivals";
-
 const Home = () => {
-  const [setNewArrivals] = useState([]); // for new products
 
   const slides = [
     {
@@ -28,20 +23,7 @@ const Home = () => {
       caption: "Free Shipping on Orders Over $50",
     },
   ];
-  useEffect(() => {
-    const fetchNewArrivals = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/products/new-arrivals"
-        );
-        setNewArrivals(response.data);
-      } catch (error) {
-        console.error("Error fetching new arrivals:", error);
-      }
-    };
-
-    fetchNewArrivals();
-  });
+ 
 
   return (
     <>
