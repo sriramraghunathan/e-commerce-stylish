@@ -1,8 +1,8 @@
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import NewArrivals from "./NewArrivals";
+import Sample from "./Sample";
 const Home = () => {
-
   const slides = [
     {
       id: 1,
@@ -23,22 +23,17 @@ const Home = () => {
       caption: "Free Shipping on Orders Over $50",
     },
   ];
- 
 
   return (
     <>
-      <div className="p-2  ">
-        <div className="text-center mt-8">
-          <h1 className="text-3xl font-bold mb-4">Welcome to Stylish</h1>
-          <p className="text-lg mb-4">great deals!</p>
-        </div>
+      <div>
         <Carousel
           autoPlay
           infiniteLoop
           showThumbs={false}
           showStatus={false}
-          interval={2000}
-          >
+          interval={3000}
+        >
           {slides.map((slide) => (
             <div key={slide.id}>
               <img src={slide.image} alt={slide.caption} />
@@ -47,6 +42,7 @@ const Home = () => {
           ))}
         </Carousel>
       </div>
+      <Sample />
       <NewArrivals />
     </>
   );

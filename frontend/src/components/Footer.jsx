@@ -1,11 +1,13 @@
-import React from "react";
 
 const Footer = () => {
   return (
     <footer>
       <div className="bg-gray-800 text-center hover:underline p-2  text-2xl">
         <a href="#top">
-          <span className="material-icons" style={{ fontSize: "50px",color:"white" }}>
+          <span
+            className="material-icons"
+            style={{ fontSize: "50px", color: "white" }}
+          >
             keyboard_arrow_up
           </span>
         </a>

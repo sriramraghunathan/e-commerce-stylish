@@ -1,23 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ cartCount }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showBanner, setShowBanner] = useState(true);
   const [log, setLog] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setLog(true);
-      } else {
-        setLog(false);
-      }
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setLog(!!user);
     });
+
+    return () => unsubscribe(); // Cleanup
   }, []);
 
   const logout = () => {
@@ -28,32 +24,22 @@ const Navbar = ({ cartCount }) => {
 
   return (
     <>
-      {showBanner && (
-        <div className="flex animate-pulse gap-10 justify-center items-center bg-black text-red-600 p-1">
-          <h1 className="text-sm md:text-lg ml-4">
-            New offers arriving soon!!!
-          </h1>
-          <button
-            onClick={() => setShowBanner(false)}
-            className="text-white mr-4 text-2xl"
-          >
-            ×
-          </button>
-        </div>
-      )}
-
-      <nav className="bg-white p-4 flex items-center justify-between">
+      {/* Top Navbar */}
+      <nav className="bg-white w-full p-5 flex items-center justify-between fixed z-50 top-0 shadow-xl">
         {/* Logo */}
-        <div className="w-10 sm:w-20 flex-shrink-0">
-          <img
-            src="https://png.pngtree.com/template/20200623/ourmid/pngtree-f-logo-vector-geometric-stylish-simple-designs-black-color-white-background-image_385210.jpg"
-            alt="Logo"
-            className="border-white rounded-full"
-          />
-        </div>
+        <Link to="/">
+          <div className="w-10 sm:w-12">
+            <img
+              src="https://thumbs.dreamstime.com/b/awesome-knight-logo-vector-illustration-design-ready-to-use-144418705.jpg"
+              alt="Logo"
+              className="rounded-full"
+            />
+          </div>
+        </Link>
+        <h1 className="text-4xl font-serif font-medium ml-5">STYLISH</h1>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex flex-1 mx-10 justify-end gap-10 font-bold text-black text-xl items-center">
+        <div className="hidden md:flex flex-1 justify-end gap-16 font-bold text-black text-lg items-center mx-16">
           <Link to="/" className="hover:underline">
             Home
           </Link>
@@ -66,14 +52,14 @@ const Navbar = ({ cartCount }) => {
           {log ? (
             <button
               onClick={logout}
-              className="hover:underline rounded-full bg-red-600 p-2 text-white"
+              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full"
             >
               Logout
             </button>
           ) : (
             <Link
               to="/login"
-              className="hover:underline border-black text-white bg-black p-1 rounded-full"
+              className="bg-green-400 text-white px-2 py-1 rounded-full "
             >
               <span className="material-icons">person</span>
             </Link>
@@ -89,17 +75,15 @@ const Navbar = ({ cartCount }) => {
         </button>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Sidebar Menu */}
       {menuOpen && (
         <>
-          {/* Overlay */}
           <div
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
             onClick={() => setMenuOpen(false)}
           ></div>
 
-          {/* Sidebar */}
-          <div className="fixed top-0 right-0 h-full w-64 bg-white z-50 shadow-lg p-6 space-y-6 transition-transform transform translate-x-0">
+          <div className="fixed top-0 right-0 h-full w-64 bg-white z-50 shadow-lg p-6 space-y-6">
             <button
               className="text-2xl text-black absolute top-4 right-4"
               onClick={() => setMenuOpen(false)}
@@ -129,7 +113,6 @@ const Navbar = ({ cartCount }) => {
               >
                 Cart({cartCount})
               </Link>
-
               {log ? (
                 <button
                   onClick={() => {
@@ -154,13 +137,13 @@ const Navbar = ({ cartCount }) => {
         </>
       )}
 
-      {/* Category Nav */}
-      <nav className="bg-gray-800 text-white p-2 md:p-4 flex flex-wrap justify-around text-sm md:text-lg font-medium">
+      {/* Category Navbar */}
+      <nav className="bg-white text-black  p-3 mt-[90px] md:mt-[100px] flex flex-wrap justify-around text-sm md:text-lg shadow-md font-medium z-30 relative">
         {["men", "women", "kids", "accessories", "shoes"].map((cat) => (
           <Link
             key={cat}
             to={`/${cat}`}
-            className="text-white px-3 py-2 hover:bg-green-300 hover:text-black hover:rounded-full hover:underline"
+            className="px-3 py-2 hover:bg-green-300 hover:text-black hover:rounded-full hover:underline"
           >
             {cat.charAt(0).toUpperCase() + cat.slice(1)}
           </Link>
