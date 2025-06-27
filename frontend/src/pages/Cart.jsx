@@ -6,6 +6,17 @@ const Cart = ({ cart, setCart }) => {
   const [paymentDetails, setPaymentDetails] = useState({});
   const [purchasedItems, setPurchasedItems] = useState([]);
 
+  // Ensure each item has a quantity field
+  const updateQuantity = (index, change) => {
+    const updatedCart = [...cart];
+    const item = updatedCart[index];
+    const newQty = item.quantity ? item.quantity + change : 1 + change;
+    if (newQty >= 1) {
+      updatedCart[index].quantity = newQty;
+      setCart(updatedCart);
+    }
+  };
+
   const removeFromCart = (index) => {
     const newCart = [...cart];
     newCart.splice(index, 1);
@@ -13,6 +24,11 @@ const Cart = ({ cart, setCart }) => {
   };
 
   const localBackendUrl = "https://e-commerce-stylish.onrender.com";
+
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * (item.quantity || 1),
+    0
+  );
 
   const handleBuyNow = async () => {
     try {
@@ -32,7 +48,7 @@ const Cart = ({ cart, setCart }) => {
   const initPayment = (orderData) => {
     const options = {
       key: "rzp_test_mXPERjodj0tlJu",
-      amount: orderData.data.amount,
+      amount: orderData.data.amount * 100,
       currency: orderData.data.currency,
       description: "Test Payment method",
       order_id: orderData.data.id,
@@ -52,8 +68,8 @@ const Cart = ({ cart, setCart }) => {
                 Date.now() + 5 * 24 * 60 * 60 * 1000
               ).toDateString(),
             });
-            setPurchasedItems(cart); // Save purchased items
-            setCart([]); // Clear cart after payment
+            setPurchasedItems(cart);
+            setCart([]);
           } else {
             alert("Payment verification failed.");
           }
@@ -69,8 +85,6 @@ const Cart = ({ cart, setCart }) => {
     const razorpay_popup = new window.Razorpay(options);
     razorpay_popup.open();
   };
-
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <>
@@ -104,7 +118,6 @@ const Cart = ({ cart, setCart }) => {
               </p>
             </div>
 
-            {/* Purchased Items */}
             <div className="mt-6 text-left">
               <h4 className="text-xl font-bold text-gray-700 mb-3">
                 🛍️ Purchased Items
@@ -122,7 +135,9 @@ const Cart = ({ cart, setCart }) => {
                     />
                     <div>
                       <p className="text-lg font-semibold">{item.name}</p>
-                      <p className="text-sm text-gray-600">₹{item.price}</p>
+                      <p className="text-sm text-gray-600">
+                        ₹{item.price} × {item.quantity || 1}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -132,7 +147,7 @@ const Cart = ({ cart, setCart }) => {
         ) : cart.length === 0 ? (
           <p className="text-center text-lg">Your cart is empty.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {cart.map((item, index) => (
               <div
                 key={index}
@@ -144,9 +159,25 @@ const Cart = ({ cart, setCart }) => {
                     alt={item.name}
                     className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded"
                   />
-                  <span className="text-base sm:text-lg">
-                    {item.name} - ₹{item.price}
-                  </span>
+                  <div>
+                    <p className="text-lg font-semibold">{item.name}</p>
+                    <p className="text-sm text-gray-600">₹{item.price}</p>
+                    <div className="flex items-center mt-2">
+                      <button
+                        onClick={() => updateQuantity(index, -1)}
+                        className="px-2 py-1 text-xl bg-red-200 rounded-l"
+                      >
+                        −
+                      </button>
+                      <span className="px-4">{item.quantity || 1}</span>
+                      <button
+                        onClick={() => updateQuantity(index, 1)}
+                        className="px-2 py-1 text-xl bg-green-200 rounded-r"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <button
                   onClick={() => removeFromCart(index)}

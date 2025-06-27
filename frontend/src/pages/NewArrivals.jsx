@@ -85,7 +85,6 @@ const NewArrivals = () => {
               New
             </span>
             <h3 className="text-lg font-semibold">{product.name}</h3>
-            <p className="text-gray-600">₹{product.price}</p>
           </div>
         ))}
       </div>

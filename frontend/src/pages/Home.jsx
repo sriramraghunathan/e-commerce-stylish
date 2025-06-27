@@ -1,8 +1,8 @@
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import NewArrivals from "./NewArrivals";
-import Sample from "./Sample";
-const Home = () => {
+
+const Home = ({ cart, addToCart, removeFromCart }) => {
   const slides = [
     {
       id: 1,
@@ -42,8 +42,12 @@ const Home = () => {
           ))}
         </Carousel>
       </div>
-      <Sample />
-      <NewArrivals />
+
+      <NewArrivals
+        cart={cart}
+        addToCart={addToCart}
+        removeFromCart={removeFromCart}
+      />
     </>
   );
 };

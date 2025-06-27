@@ -13,6 +13,8 @@ import Shoes from "./pages/Shoes";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import NewArrivals from "./pages/NewArrivals";
+import AdminAddProduct from "./components/AdminAddProduct";
+
 
 
 const App = () => {
@@ -22,6 +24,7 @@ const App = () => {
     <div>
       <Navbar cartCount={cart.length} />
       <Routes>
+        <Route path="/admin" element={<AdminAddProduct />} />;
         <Route path="/" element={<Home />} />
         <Route
           path="/products"

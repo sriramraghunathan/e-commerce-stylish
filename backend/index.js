@@ -1,21 +1,34 @@
 const express = require("express");
 const cors = require("cors");
-const Razorpay = require("razorpay"); // ✅ Fixed capitalization
+const Razorpay = require("razorpay");
 const crypto = require("crypto");
+const mongoose = require("mongoose");
+
+// Import product routes
+const productRoutes = require("./routes/productRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// ✅ Middleware
 app.use(cors());
 app.use(express.json());
 
-// Basic route
+// ✅ MongoDB Connection
+mongoose
+  .connect("mongodb://localhost:27017/yourdbname", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+// ✅ Basic route
 app.get("/", (req, res) => {
   res.send("Backend server is running!");
 });
 
-// Create Razorpay order
+// ✅ Payment order route
 app.post("/api/payment/orders", async (req, res) => {
   try {
     const razorpayInstance = new Razorpay({
@@ -24,7 +37,7 @@ app.post("/api/payment/orders", async (req, res) => {
     });
 
     const options = {
-      amount: req.body.amount * 100, // amount in paise
+      amount: req.body.amount * 100, // convert to paise
       currency: "INR",
       receipt: crypto.randomBytes(10).toString("hex"),
     };
@@ -40,7 +53,7 @@ app.post("/api/payment/orders", async (req, res) => {
   }
 });
 
-// Verify Payment
+// ✅ Payment verify route
 app.post("/api/payment/verify", (req, res) => {
   try {
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
@@ -57,12 +70,15 @@ app.post("/api/payment/verify", (req, res) => {
       return res.status(400).send("Failed..");
     }
   } catch (error) {
-    console.log(error);
+    console.error("Verification error:", error);
     return res.status(500).send("Server Error..");
   }
 });
 
-// Start server
+// ✅ Mount Product Routes *AFTER* middlewares
+app.use("/api/products", productRoutes);
+
+// ✅ Start server once
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
