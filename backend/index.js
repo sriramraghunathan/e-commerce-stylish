@@ -16,7 +16,7 @@ app.use(express.json());
 
 // ✅ MongoDB Connection
 mongoose
-  .connect("mongodb://localhost:27017/yourdbname", {
+  .connect("mongodb://localhost:27017/stylish", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

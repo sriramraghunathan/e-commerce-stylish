@@ -11,7 +11,8 @@ const AdminAddProduct = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
-  const backendUrl = "http://localhost:5000/api/products"; // update if different
+  const backendUrl =
+    "https://e-commerce-project-67ti.onrender.com/api/products"; // update if different
 
   // Fetch all products on load
   useEffect(() => {
