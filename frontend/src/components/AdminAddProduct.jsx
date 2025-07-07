@@ -11,8 +11,7 @@ const AdminAddProduct = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
-  const backendUrl =
-    "https://e-commerce-project-67ti.onrender.com/api/products"; // update if different
+  const backendUrl = "http://localhost:5000/api/products"; 
 
   // Fetch all products on load
   useEffect(() => {
@@ -39,6 +38,8 @@ const AdminAddProduct = () => {
         await axios.put(`${backendUrl}/${editingProductId}`, formData);
         setIsEditing(false);
         setEditingProductId(null);
+        console.log("Updating product ID:", editingProductId);
+
       } else {
         await axios.post(`${backendUrl}/add`, formData);
       }
@@ -54,7 +55,7 @@ const AdminAddProduct = () => {
     setEditingProductId(product._id);
     setFormData({
       name: product.name,
-      price: product.price,
+      price: Number(product.price),
       image: product.image,
       category: product.category || "",
     });

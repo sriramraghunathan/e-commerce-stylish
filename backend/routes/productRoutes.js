@@ -1,15 +1,11 @@
-// File: routes/productRoutes.js
 const express = require("express");
 const router = express.Router();
-const {
-  addProduct,
-  getAllProducts,
-} = require("../controllers/productController");
+const productController = require("../controllers/productController");
 
-// POST /api/products/add
-router.post("/add", addProduct);
-
-// GET /api/products
-router.get("/", getAllProducts);
+// Routes
+router.post("/add", productController.addProduct);
+router.get("/", productController.getAllProducts);
+router.put("/:id", productController.updateProduct); // 🔧 For edit
+router.delete("/:id", productController.deleteProduct); // 🗑️ For delete
 
 module.exports = router;
