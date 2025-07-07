@@ -12,7 +12,9 @@ const NewArrivals = () => {
 
   const fetchNewArrivals = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get(
+        "https://e-commerce-project-67ti.onrender.com/api/products"
+      );
       setProducts(res.data.slice(-8)); // get the last 8 products as "new arrivals"
     } catch (error) {
       console.error("Failed to fetch products:", error);

@@ -10,7 +10,9 @@ const Products = ({ cart, setCart }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/products");
+        const { data } = await axios.get(
+          "https://e-commerce-project-67ti.onrender.com/api/products"
+        );
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products", error);
