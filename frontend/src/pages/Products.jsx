@@ -11,7 +11,7 @@ const Products = ({ cart, setCart }) => {
     const fetchProducts = async () => {
       try {
         const { data } = await axios.get(
-          "https://e-commerce-project-67ti.onrender.com/api/products"
+          "https://e-commerce-stylish-1.onrender.com/api/products"
         );
         setProducts(data);
       } catch (error) {
