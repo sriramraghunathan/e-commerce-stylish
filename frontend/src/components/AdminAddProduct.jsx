@@ -11,7 +11,7 @@ const AdminAddProduct = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
-  const backendUrl = "https://e-commerce-stylish-1.onrender.com/api/products"; 
+  const backendUrl = "https://e-commerce-stylish-1.onrender.com/api/products";
 
   // Fetch all products on load
   useEffect(() => {
@@ -39,7 +39,6 @@ const AdminAddProduct = () => {
         setIsEditing(false);
         setEditingProductId(null);
         console.log("Updating product ID:", editingProductId);
-
       } else {
         await axios.post(`${backendUrl}/add`, formData);
       }
@@ -142,13 +141,19 @@ const AdminAddProduct = () => {
             <p className="text-sm text-gray-400">{product.category}</p>
             <div className="flex justify-between mt-4">
               <button
-                onClick={() => handleEdit(product)}
-                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                onClick={() => {
+                  window.scrollTo({ top: -1, behavior: "smooth" });
+                  handleEdit(product);
+                }}
+                className="bg-yellow-500  text-white px-3 py-1 rounded hover:bg-yellow-600"
               >
                 Edit
               </button>
               <button
-                onClick={() => handleDelete(product._id)}
+                onClick={() => {
+                  window.scrollTo({ top: -1, behavior: "smooth" });
+                  handleDelete(product._id);
+                }}
                 className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
               >
                 Delete
