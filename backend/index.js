@@ -11,8 +11,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(
   cors({
-    origin: "https://e-commerce-stylish-dl7e.vercel.app/",
-    methods: ["GET", "POST"],
+    origin:
+      "https://e-commerce-stylish-dl7e-git-main-srirams-projects-54e44124.vercel.app", // your React frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allow PUT and DELETE
     credentials: true,
   })
 );
