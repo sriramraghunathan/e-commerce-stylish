@@ -19,7 +19,7 @@ const AdminAddProduct = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      window.location.href = "/login";
+      window.location.href = "/admin-login";
     } else {
       fetchProducts();
     }
