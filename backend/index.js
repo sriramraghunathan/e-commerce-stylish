@@ -4,6 +4,8 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const mongoose = require("mongoose");
 
+const authRoutes = require("./routes/authRoutes");
+
 // Import product routes
 const productRoutes = require("./routes/productRoutes");
 
@@ -12,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin:
-      "https://e-commerce-stylish-dl7e-git-main-srirams-projects-54e44124.vercel.app", // your React frontend URL
+      "https://e-commerce-stylish-dl7e-git-main-srirams-projects-54e44124.vercel.app/", // your React frontend URL
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allow PUT and DELETE
     credentials: true,
   })
@@ -21,6 +23,8 @@ app.use(
 // ✅ Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/api/auth", authRoutes);
+
 
 // ✅ MongoDB Connection
 mongoose

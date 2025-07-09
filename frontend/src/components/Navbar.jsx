@@ -18,7 +18,7 @@ const Navbar = ({ cartCount }) => {
 
   const logout = () => {
     signOut(auth)
-      .then(() => navigate("/login"))
+      .then(() => navigate("/admin-login"))
       .catch((error) => console.error("Logout failed:", error));
   };
 
@@ -58,7 +58,7 @@ const Navbar = ({ cartCount }) => {
             </button>
           ) : (
             <Link
-              to="/login"
+              to="/admin-login"
               className="bg-green-400 text-white px-2 py-1 rounded-full "
             >
               <span className="material-icons">person</span>
@@ -125,7 +125,7 @@ const Navbar = ({ cartCount }) => {
                 </button>
               ) : (
                 <Link
-                  to="/login"
+                  to="/admin-login"
                   className="bg-green-400 text-white p-2 rounded text-center"
                   onClick={() => setMenuOpen(false)}
                 >

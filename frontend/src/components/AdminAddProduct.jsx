@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+
+
+
 
 const AdminAddProduct = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +16,14 @@ const AdminAddProduct = () => {
   const [editingProductId, setEditingProductId] = useState(null);
   const backendUrl = "https://e-commerce-stylish-1.onrender.com/api/products";
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/login";
+    } else {
+      fetchProducts();
+    }
+  }, []);
   // Fetch all products on load
   useEffect(() => {
     fetchProducts();
@@ -74,6 +85,15 @@ const AdminAddProduct = () => {
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h1>
+      <button
+        onClick={() => {
+          localStorage.removeItem("token");
+          window.location.href = "/admin-login";
+        }}
+        className="bg-gray-800 text-white px-4 py-2 rounded mt-4"
+      >
+        Logout
+      </button>
 
       <form
         onSubmit={handleAddOrUpdate}
@@ -142,7 +162,7 @@ const AdminAddProduct = () => {
             <div className="flex justify-between mt-4">
               <button
                 onClick={() => {
-                  window.scrollTo({ top: -1, behavior: "smooth" });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                   handleEdit(product);
                 }}
                 className="bg-yellow-500  text-white px-3 py-1 rounded hover:bg-yellow-600"
@@ -151,7 +171,7 @@ const AdminAddProduct = () => {
               </button>
               <button
                 onClick={() => {
-                  window.scrollTo({ top: -1, behavior: "smooth" });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                   handleDelete(product._id);
                 }}
                 className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
