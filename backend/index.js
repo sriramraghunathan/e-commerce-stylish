@@ -13,23 +13,24 @@ const productRoutes = require("./routes/productRoutes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://e-commerce-stylish-dl7e-cinr4u7y0-srirams-projects-54e44124.vercel.app/",
-];
-
+  "https://e-commerce-stylish-dl7e-cinr4u7y0-srirams-projects-54e44124.vercel.app",
+  "https://e-commerce-stylish-dl7e-git-main-srirams-projects-54e44124.vercel.app",
+]
 
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log("🌐 Request from origin:", origin);
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        console.log("❌ Blocked by CORS:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Optional unless you're using cookies
+    credentials: true,
   })
 );
 
