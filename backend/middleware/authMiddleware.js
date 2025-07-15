@@ -1,5 +1,6 @@
 // middlewares/authMiddleware.js (Option 2 - Firebase Token Only)
 
+
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const isAdmin = req.headers.isadmin === "true";

@@ -17,12 +17,21 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://e-commerce-stylish-dl7e-srirams-projects-54e44124.vercel.app",
 ];
+
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log("Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 
 // Middleware
 app.use(express.json());

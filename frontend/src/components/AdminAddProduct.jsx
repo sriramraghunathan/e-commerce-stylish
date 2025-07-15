@@ -51,6 +51,7 @@ const AdminAddProduct = () => {
           Authorization: `Bearer ${token}`,
           isadmin: localStorage.getItem("isAdmin"),
         },
+        withCredentials: false,
       };
       
 
@@ -99,6 +100,7 @@ const AdminAddProduct = () => {
           Authorization: `Bearer ${token}`,
           isadmin: localStorage.getItem("isAdmin"),
         },
+        withCredentials: false,
       };
       await axios.delete(`${backendUrl}/${id}`, config);
       fetchProducts();
