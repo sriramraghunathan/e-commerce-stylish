@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-
-
+import axios from "axios"
 
 const AdminAddProduct = () => {
   const [products, setProducts] = useState([]);
@@ -14,20 +11,22 @@ const AdminAddProduct = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
-  const backendUrl = "https://e-commerce-stylish-1.onrender.com/api/products";
+
+  const backendUrl =
+    window.location.hostname === "localhost"
+      ? "http://localhost:5000/api/products"
+      : "https://e-commerce-stylish-1.onrender.com/api/products";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+    if (!token || !isAdmin) {
       window.location.href = "/admin-login";
     } else {
-      fetchProducts();
+      fetchProducts()
     }
-  }, []);
-  // Fetch all products on load
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  },)
 
   const fetchProducts = async () => {
     try {
@@ -44,19 +43,36 @@ const AdminAddProduct = () => {
 
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          isadmin: localStorage.getItem("isAdmin"),
+        },
+      };
+      
+
       if (isEditing) {
-        await axios.put(`${backendUrl}/${editingProductId}`, formData);
+        await axios.put(`${backendUrl}/${editingProductId}`, formData, config);
         setIsEditing(false);
         setEditingProductId(null);
-        console.log("Updating product ID:", editingProductId);
       } else {
-        await axios.post(`${backendUrl}/add`, formData);
+        await axios.post(`${backendUrl}/add`, formData, config);
       }
+
       setFormData({ name: "", price: "", image: "", category: "" });
       fetchProducts();
     } catch (error) {
-      console.error("Error saving product:", error);
+      if (error.response) {
+        console.error("Server Error:", error.response.data);
+        console.error("Status Code:", error.response.status);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error saving product:", error.message);
+      }
     }
   };
 
@@ -69,31 +85,52 @@ const AdminAddProduct = () => {
       image: product.image,
       category: product.category || "",
     });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id) => {
+    const token = localStorage.getItem("token");
     if (!window.confirm("Are you sure you want to delete this product?"))
       return;
+
     try {
-      await axios.delete(`${backendUrl}/${id}`);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          isadmin: localStorage.getItem("isAdmin"),
+        },
+      };
+      await axios.delete(`${backendUrl}/${id}`, config);
       fetchProducts();
     } catch (error) {
-      console.error("Error deleting product:", error);
+      if (error.response) {
+        console.error("Server Error:", error.response.data);
+        console.error("Status Code:", error.response.status);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error deleting product:", error.message);
+      }
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isAdmin");
+    window.location.href = "/admin-login";
   };
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h1>
-      <button
-        onClick={() => {
-          localStorage.removeItem("token");
-          window.location.href = "/admin-login";
-        }}
-        className="bg-gray-800 text-white px-4 py-2 rounded mt-4"
-      >
-        Logout
-      </button>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <button
+          onClick={handleLogout}
+          className="bg-gray-800 text-white px-4 py-2 rounded"
+        >
+          Logout
+        </button>
+      </div>
 
       <form
         onSubmit={handleAddOrUpdate}
@@ -161,19 +198,13 @@ const AdminAddProduct = () => {
             <p className="text-sm text-gray-400">{product.category}</p>
             <div className="flex justify-between mt-4">
               <button
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                  handleEdit(product);
-                }}
-                className="bg-yellow-500  text-white px-3 py-1 rounded hover:bg-yellow-600"
+                onClick={() => handleEdit(product)}
+                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
               >
                 Edit
               </button>
               <button
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                  handleDelete(product._id);
-                }}
+                onClick={() => handleDelete(product._id)}
                 className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
               >
                 Delete

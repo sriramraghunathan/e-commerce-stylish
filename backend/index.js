@@ -3,47 +3,52 @@ const cors = require("cors");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
-
-// Import product routes
 const productRoutes = require("./routes/productRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://e-commerce-stylish-dl7e-srirams-projects-54e44124.vercel.app/",
+];
+
 app.use(
   cors({
-    origin:
-      "https://e-commerce-stylish-dl7e-git-main-srirams-projects-54e44124.vercel.app/", // your React frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allow PUT and DELETE
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
-// ✅ Middleware
-app.use(cors());
+// Middleware
 app.use(express.json());
-app.use("/api/auth", authRoutes);
 
-
-// ✅ MongoDB Connection
+// MongoDB Connection
 mongoose
   .connect(
     "mongodb+srv://srikanthraghu2005:2005@cluster0.ip7teae.mongodb.net/stylish?retryWrites=true&w=majority&appName=Cluster0",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
+    { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// ✅ Basic route
+// Basic Test Route
 app.get("/", (req, res) => {
   res.send("Backend server is running!");
 });
 
-// ✅ Payment order route
+// Payment: Create Order
 app.post("/api/payment/orders", async (req, res) => {
   try {
     const razorpayInstance = new Razorpay({
@@ -52,7 +57,7 @@ app.post("/api/payment/orders", async (req, res) => {
     });
 
     const options = {
-      amount: req.body.amount * 100, // convert to paise
+      amount: req.body.amount * 100,
       currency: "INR",
       receipt: crypto.randomBytes(10).toString("hex"),
     };
@@ -68,7 +73,7 @@ app.post("/api/payment/orders", async (req, res) => {
   }
 });
 
-// ✅ Payment verify route
+// Payment: Verify Signature
 app.post("/api/payment/verify", (req, res) => {
   try {
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
@@ -80,20 +85,20 @@ app.post("/api/payment/verify", (req, res) => {
       .digest("hex");
 
     if (expectedSign === razorpay_signature) {
-      return res.status(200).send("success..");
+      return res.status(200).send("success");
     } else {
-      return res.status(400).send("Failed..");
+      return res.status(400).send("failed");
     }
   } catch (error) {
     console.error("Verification error:", error);
-    return res.status(500).send("Server Error..");
+    return res.status(500).send("Server Error");
   }
 });
 
-// ✅ Mount Product Routes *AFTER* middlewares
+// Mount Routes
+app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 
-// ✅ Start server once
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });

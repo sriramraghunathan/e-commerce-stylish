@@ -1,20 +1,24 @@
-const jwt = require("jsonwebtoken");
+// middlewares/authMiddleware.js (Option 2 - Firebase Token Only)
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Bearer <token>
+  const authHeader = req.headers.authorization;
+  const isAdmin = req.headers.isadmin === "true";
 
-  if (!token) return res.status(401).json({ message: "No token provided" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
-  try {
-    const decoded = jwt.verify(token, "your_jwt_secret_key");
-    if (!decoded.isAdmin)
-      return res.status(403).json({ message: "Not authorized as admin" });
+  // Skip actual JWT verification for Firebase token
+  req.user = { isAdmin };
+  next();
+};
 
-    req.user = decoded;
-    next(); // Proceed to the route
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+const isAdmin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    return res.status(403).json({ message: "Admin access required" });
   }
 };
 
-module.exports = verifyToken;
+module.exports = { verifyToken, isAdmin };
