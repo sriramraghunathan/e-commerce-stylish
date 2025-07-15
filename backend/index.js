@@ -15,18 +15,11 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://e-commerce-stylish-dl7e-srirams-projects-54e44124.vercel.app/",
+  "https://e-commerce-stylish-dl7e-srirams-projects-54e44124.vercel.app",
 ];
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
   })
 );
